@@ -1,6 +1,6 @@
 variable project {
   type        = string
-  default     = "gumtreephoenixdwhdev7344"
+  default     = ""
   description = "description"
 }
 
