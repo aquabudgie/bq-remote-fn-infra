@@ -1,12 +1,19 @@
 resource "google_storage_bucket" "bucket" {
-  name     = "${var.project}-gcf-source"  # Every bucket name must be globally unique
-  location = var.region
+  name                        = "${var.project}-remote-function-source" # Every bucket name must be globally unique
+  location                    = var.region
   uniform_bucket_level_access = true
-#   tags=local.common_tags
+  labels                      = local.common_tags
 }
 
+data "archive_file" "source" {
+  type        = "zip"
+  source_dir  = var.function_source
+  output_path = "./tmp/function.zip"
+}
+
+
 resource "google_storage_bucket_object" "object" {
-  name   = "function-source.zip"
+  name   = "${var.bucket_object_name}-${data.archive_file.source.id}"
   bucket = google_storage_bucket.bucket.name
-  source = "../cloud_function_emulation/function-source.zip"  # Add path to the zipped function source code
+  source = data.archive_file.source.output_path
 }

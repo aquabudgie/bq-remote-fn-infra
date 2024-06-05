@@ -1,8 +1,9 @@
 resource "google_bigquery_dataset" "cloud-functions-dataset" {
-  dataset_id    = "cf_routines"
-  friendly_name = "Cloud functions routines"
+  dataset_id    = "remote_function_routines"
+  friendly_name = "remote function routines"
   description   = "Dataset to contain cloud function routines"
   location      = var.region
+  labels        = local.common_tags
 }
 
 
@@ -17,7 +18,7 @@ resource "google_bigquery_connection" "parse_useragents" {
 
 resource "google_project_iam_member" "run_invoker_binding" {
   project = var.project
-  role    = "roles/run.invoker"
+  role    = "roles/editor"
   member  = "serviceAccount:${google_bigquery_connection.parse_useragents.cloud_resource.0.service_account_id}"
 }
 
@@ -31,9 +32,9 @@ locals {
 
 resource "random_id" "bq_job_suffix" {
   byte_length = 3
-  keepers = {
-    generate_slides = sha256(local.generate_useragent_query)
-  }
+  # keepers = {
+  #  generate_slides = sha256(local.generate_useragent_query)
+  #}
 }
 
 resource "google_bigquery_job" "cf-create-remote-function-job" {
@@ -46,5 +47,6 @@ resource "google_bigquery_job" "cf-create-remote-function-job" {
     query              = local.generate_useragent_query
   }
   location = var.region
+  labels   = local.common_tags
 
 }

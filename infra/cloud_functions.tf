@@ -3,9 +3,11 @@ resource "google_cloudfunctions2_function" "parse_user_agents" {
   description = null
   labels = {
     deployment-tool = "cli-gcloud"
+    owner           = local.common_tags.owner
+    purpose         = local.common_tags.purpose
   }
   location = var.region
-  name     = "uaparse-tf"
+  name     = "ua_parser"
   project  = var.project
   build_config {
     docker_repository     = null
@@ -15,25 +17,20 @@ resource "google_cloudfunctions2_function" "parse_user_agents" {
     worker_pool           = null
     source {
       storage_source {
-        bucket     = google_storage_bucket.bucket.name
-        object     = google_storage_bucket_object.object.name
+        bucket = google_storage_bucket.bucket.name
+        object = google_storage_bucket_object.object.name
       }
     }
   }
   service_config {
-    all_traffic_on_latest_revision   = true
-    available_cpu                    = "1000m"
-    available_memory                 = "1Gi"
-    environment_variables            = {}
-    ingress_settings                 = "ALLOW_ALL"
-    max_instance_count               = 1000
-    max_instance_request_concurrency = 1
-    min_instance_count               = 0
-    # service                          = "projects/asher-caley-sandbox/locations/australia-southeast1/services/uaparse-tf"
-    # service_account_email            = "950516818175-compute@developer.gserviceaccount.com"
-    timeout_seconds                  = 59
-    vpc_connector                    = null
-    vpc_connector_egress_settings    = null
+    all_traffic_on_latest_revision   = var.service_config.all_traffic_on_latest_revision
+    available_cpu                    = var.service_config.available_cpu
+    available_memory                 = var.service_config.available_memory
+    ingress_settings                 = var.service_config.ingress_settings
+    max_instance_count               = var.service_config.max_instance_count
+    max_instance_request_concurrency = var.service_config.max_instance_request_concurrency
+    min_instance_count               = var.service_config.min_instance_count
+    timeout_seconds                  = var.service_config.timeout_seconds
   }
   timeouts {
     create = null

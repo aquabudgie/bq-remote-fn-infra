@@ -1,5 +1,5 @@
 #!/bin/bash
 
 pushd infra
-tofu plan -var-file=".tfvars"
+tofu apply -var-file=".tfvars"
 popd

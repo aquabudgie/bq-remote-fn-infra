@@ -2,7 +2,7 @@ terraform {
   required_version = "~> 1.7.1"
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "4.51.0"
     }
   }
@@ -14,11 +14,11 @@ provider "google" {
 }
 
 locals {
-  region = var.region
+  region  = var.region
   project = var.project
 
   common_tags = {
-    Owner = "Asher"
-    Purpose = "remote-function-testing"
+    owner   = "asher_caley"
+    purpose = "bigquery-remote-functions-poc"
   }
 }
