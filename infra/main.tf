@@ -5,12 +5,19 @@ terraform {
       source  = "hashicorp/google"
       version = "4.51.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.2"
+    }
   }
 }
 
 provider "google" {
   project = var.project
   region  = var.region
+}
+
+provider "random" {
 }
 
 locals {

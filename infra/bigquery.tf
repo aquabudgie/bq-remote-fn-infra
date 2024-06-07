@@ -32,9 +32,9 @@ locals {
 
 resource "random_id" "bq_job_suffix" {
   byte_length = 3
-  # keepers = {
-  #  generate_slides = sha256(local.generate_useragent_query)
-  #}
+  keepers = {
+    generate_slides = sha256(local.generate_useragent_query)
+  }
 }
 
 resource "google_bigquery_job" "cf-create-remote-function-job" {
