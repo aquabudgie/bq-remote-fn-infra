@@ -1,7 +1,9 @@
 # MacOS files
 .DS_Store
 # Local .terraform directories
-**/.terraform/*
+**/.terraform
+
+**/tmp
 
 # .tfstate files
 *.tfstate
